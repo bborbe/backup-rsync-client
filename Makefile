@@ -16,13 +16,16 @@ buildgo:
 build:
 	docker build --no-cache --rm=true -t bborbe/backup-rsync-client-build -f ./Dockerfile.build .
 	docker run -t bborbe/backup-rsync-client-build /bin/true
-	docker cp `docker ps -q -n=1 -f ancestor=bborbe/backup-rsync-client-build -f rsync-client=exited`:/backup_rsync_client .
-	docker rm `docker ps -q -n=1 -f ancestor=bborbe/backup-rsync-client-build -f rsync-client=exited`
+	docker cp `docker ps -q -n=1 -f ancestor=bborbe/backup-rsync-client-build -f status=exited`:/backup_rsync_client .
+	docker rm `docker ps -q -n=1 -f ancestor=bborbe/backup-rsync-client-build -f status=exited`
 	docker build --no-cache --rm=true --tag=bborbe/backup-rsync-client -f Dockerfile.static .
 	rm backup_rsync_client
 
 run:
 	docker run -p 8080:8080 bborbe/backup-rsync-client
+
+shell:
+	docker run -i -t bborbe/backup-rsync-client:latest /bin/bash
 
 upload:
 	docker push bborbe/backup-rsync-client
