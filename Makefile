@@ -25,7 +25,7 @@ run:
 	docker run -p 8080:8080 bborbe/backup-rsync-client
 
 shell:
-	docker run -i -t bborbe/backup-rsync-client:latest /bin/bash
+	docker run -i -t --entrypoint /bin/bash bborbe/backup-rsync-client:latest
 
 upload:
 	docker push bborbe/backup-rsync-client
