@@ -1,0 +1,6 @@
+FROM alpine
+RUN apk update
+RUN apk add rsync openssh
+MAINTAINER Benjamin Borbe <bborbe@rocketnews.de>
+ADD backup_rsync_client /
+ENTRYPOINT ["/backup_rsync_client"]
