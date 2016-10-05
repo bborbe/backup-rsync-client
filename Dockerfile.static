@@ -1,5 +1,8 @@
 FROM alpine
 RUN apk add --update rsync openssh bash && rm -rf /var/cache/apk/*
 MAINTAINER Benjamin Borbe <bborbe@rocketnews.de>
+
+ENV LOCK /backup_rsync_client.lock
+
 ADD backup_rsync_client /
 ENTRYPOINT ["/backup_rsync_client"]
