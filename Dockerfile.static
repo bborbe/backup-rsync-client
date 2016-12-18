@@ -5,5 +5,5 @@ RUN apk add --update rsync openssh bash && rm -rf /var/cache/apk/*
 
 ENV LOCK /backup_rsync_client.lock
 
-ADD backup_rsync_client /
+COPY backup_rsync_client /
 ENTRYPOINT ["/backup_rsync_client"]
