@@ -3,8 +3,15 @@
 set -e
 
 make checkout
+#latestTag=$(cd sources;git describe --tags `git rev-list --tags --max-count=1`)
+latestTag=$(cd sources;git tag -l --points-at HEAD)
 
-latestTag=$(cd sources;git describe --tags `git rev-list --tags --max-count=1`)
+VERSION=latest make build
+VERSION=latest make upload
+VERSION=latest make clean
 
-VERSION=${latestTag} make build
-VERSION=${latestTag} make upload
+if ! test -z "$latestTag"; then
+	VERSION=${latestTag} make build
+	VERSION=${latestTag} make upload
+	VERSION=${latestTag} make clean
+fi
