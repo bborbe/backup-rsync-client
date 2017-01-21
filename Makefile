@@ -1,4 +1,4 @@
-VERSION ?= 1.0.0
+VERSION ?= latest
 REGISTRY ?= docker.io
 
 default: checkout build upload clean
