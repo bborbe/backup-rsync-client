@@ -1,7 +1,7 @@
 VERSION ?= 1.0.0
 REGISTRY ?= docker.io
 
-default: build
+default: checkout build upload clean
 
 clean:
 	docker rmi $(REGISTRY)/bborbe/backup-rsync-client-build:$(VERSION)
