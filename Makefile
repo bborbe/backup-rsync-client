@@ -1,14 +1,18 @@
-VERSION ?= 1.1.0
+VERSION ?= 1.0.0
 
 default: build
 
 clean:
 	docker rmi bborbe/backup-rsync-client-build:$(VERSION)
 	docker rmi bborbe/backup-rsync-client:$(VERSION)
+	rm -rf sources
+
+checkout:
+	git -C sources pull || git clone https://github.com/bborbe/backup.git sources
 
 setup:
-	mkdir -p ./go/src/github.com/bborbe/backup
-	git clone https://github.com/bborbe/backup.git ./go/src/github.com/bborbe/backup
+	#mkdir -p ./go/src/github.com/bborbe/backup
+	#git clone https://github.com/bborbe/backup.git ./go/src/github.com/bborbe/backup
 	go get -u github.com/Masterminds/glide
 	cd ./go/src/github.com/bborbe/backup && glide install
 
