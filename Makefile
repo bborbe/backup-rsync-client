@@ -11,8 +11,6 @@ checkout:
 	git -C sources pull || git clone https://github.com/bborbe/backup.git sources
 
 setup:
-	#mkdir -p ./go/src/github.com/bborbe/backup
-	#git clone https://github.com/bborbe/backup.git ./go/src/github.com/bborbe/backup
 	go get -u github.com/Masterminds/glide
 	cd ./go/src/github.com/bborbe/backup && glide install
 
