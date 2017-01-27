@@ -1,5 +1,6 @@
 VERSION ?= latest
 REGISTRY ?= docker.io
+BRANCH ?= master
 
 default: checkout build upload clean
 
@@ -8,7 +9,7 @@ clean:
 	docker rmi $(REGISTRY)/bborbe/backup-rsync-client:$(VERSION)
 
 checkout:
-	git -C sources pull || git clone https://github.com/bborbe/backup.git sources
+	git -C sources pull || git clone -b $(BRANCH) --single-branch --depth 1 https://github.com/bborbe/backup.git sources
 
 setup:
 	go get -u github.com/Masterminds/glide
