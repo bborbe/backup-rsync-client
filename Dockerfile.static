@@ -1,9 +1,0 @@
-FROM alpine:3.5
-MAINTAINER Benjamin Borbe <bborbe@rocketnews.de>
-
-RUN apk add --update ca-certificates rsync openssh bash && rm -rf /var/cache/apk/*
-
-ENV LOCK /backup_rsync_client.lock
-
-COPY backup_rsync_client /
-ENTRYPOINT ["/backup_rsync_client"]

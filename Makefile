@@ -1,30 +1,17 @@
-VERSION ?= latest
 REGISTRY ?= docker.io
-BRANCH ?= master
+VENDOR_VERSION ?= master
+ifeq ($(BUILD_VERSION),)
+	BUILD_VERSION := $(shell git describe --tags `git rev-list --tags --max-count=1`)
+endif
+VERSION := $(VENDOR_VERSION)-$(BUILD_VERSION)
 
-default: checkout build upload clean
+default: build upload clean
 
 clean:
-	docker rmi $(REGISTRY)/bborbe/backup-rsync-client-build:$(VERSION)
 	docker rmi $(REGISTRY)/bborbe/backup-rsync-client:$(VERSION)
 
-checkout:
-	git -C sources pull || git clone -b $(BRANCH) --single-branch --depth 1 https://github.com/bborbe/backup.git sources
-
-setup:
-	go get -u github.com/Masterminds/glide
-	cd ./go/src/github.com/bborbe/backup && glide install
-
-buildgo:
-	CGO_ENABLED=0 GOOS=linux go build -ldflags "-s" -a -installsuffix cgo -o backup_rsync_client ./go/src/github.com/bborbe/backup/bin/backup_rsync_client
-
 build:
-	docker build --build-arg VERSION=$(VERSION) --no-cache --rm=true -t $(REGISTRY)/bborbe/backup-rsync-client-build:$(VERSION) -f ./Dockerfile.build .
-	docker run -t $(REGISTRY)/bborbe/backup-rsync-client-build:$(VERSION) /bin/true
-	docker cp `docker ps -q -n=1 -f ancestor=bborbe/backup-rsync-client-build:$(VERSION) -f status=exited`:/backup_rsync_client .
-	docker rm `docker ps -q -n=1 -f ancestor=bborbe/backup-rsync-client-build:$(VERSION) -f status=exited`
-	docker build --no-cache --rm=true --tag=bborbe/backup-rsync-client:$(VERSION) -f Dockerfile.static .
-	rm backup_rsync_client
+	docker build --build-arg VENDOR_VERSION=$(VENDOR_VERSION) --no-cache --rm=true -t $(REGISTRY)/bborbe/backup-rsync-client:$(VERSION) -f ./Dockerfile .
 
 run:
 	docker run -p 8080:8080 $(REGISTRY)/bborbe/backup-rsync-client:$(VERSION)
